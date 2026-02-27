@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "CI/CD to AWS EC2 is Working 🚀"
+   return "CI/CD to AWS EC2 is Working 🚀 - Auto Deployed!"
 
 @app.route('/health')
 def health():
