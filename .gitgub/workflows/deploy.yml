@@ -1,0 +1,34 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu
+            if [ -d "aws-cicd-flask-app" ]; then
+              cd aws-cicd-flask-app
+              git pull
+            else
+              git clone https://github.com/mostafaismail23398/aws-cicd-flask-app.git
+              cd aws-cicd-flask-app
+            fi
+            docker stop flask-app || true
+            docker rm flask-app || true
+            docker build -t flask-app .
+            docker run -d -p 80:5000 --name flask-app flask-app
