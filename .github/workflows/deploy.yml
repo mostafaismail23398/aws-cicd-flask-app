@@ -28,6 +28,8 @@ jobs:
               git clone https://github.com/mostafaismail23398/aws-cicd-flask-app.git
               cd aws-cicd-flask-app
             fi
+            docker stop flask-app || true
+            docker rm flask-app || true
             sudo apt install docker-compose -y
             docker-compose down
             docker-compose up -d --build
